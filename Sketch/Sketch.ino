@@ -4,10 +4,15 @@
 #include <SPI.h>
 #include <SD.h>
 #include <SoftwareSerial.h>
+#include "DHT.h"
+
+#define DHTPIN 10 
 
 UTFT myGLCD(CTE32HR, 38, 39, 40, 41);
 
 SFE_BMP180 pressure; 
+
+DHT dht(DHTPIN, DHT11);
 
 extern uint8_t SmallFont[];
 extern uint8_t BigFont[];
@@ -18,6 +23,8 @@ void setup()
 delay(1000);
 
 Serial.begin(9600);
+
+dht.begin();
 
 if(pressure.begin())                         // Инициализация датчика
 Serial.println("Датчик подключен");      
@@ -50,7 +57,11 @@ myGLCD.clrScr();
 }
 
 myGLCD.print("No satellite connection", CENTER, 160);
+delay(4500);
 
+myGLCD.clrScr();
+
+myGLCD.print("No SD connection", CENTER, 160);
 delay(4500);
 }
 
@@ -103,6 +114,25 @@ else Serial.println("error retrieving pressure measurement\n");}    // Ошиб�
 else Serial.println("error starting pressure measurement\n");}      // Ошибка запуска получения давления
 else Serial.println("error retrieving temperature measurement\n");} // Ошибка получения температуры
 else Serial.println("error starting temperature measurement\n");    // Ошибка запуска получения температуры
+
+float h = dht.readHumidity(); 
+float t = dht.readTemperature(); 
+
+if (isnan(h) || isnan(t)) 
+{  // Проверка. Если не удается считать показания, выводится «Ошибка считывания», и программа завершает работу
+Serial.println("Ошибка считывания");
+return;
+}
+
+Serial.print("Влажность: ");
+Serial.print(h);
+Serial.print(" %\t");
+Serial.print("Температура: ");
+Serial.print(t);
+Serial.println(" *C ");
+
+String HString = String(h);
+String T2String = String(t);
       
 myGLCD.InitLCD(1);
 myGLCD.clrScr();
@@ -112,14 +142,19 @@ myGLCD.print("Date: ", 7, 26);
 myGLCD.print("Time: ", 7, 52);
 myGLCD.print("Latitude: ", 7, 78);
 myGLCD.print("longitude: ", 7, 104);
-myGLCD.print("Temperature: ", 7, 130);
-myGLCD.print(TString, 199, 130);
-myGLCD.print("C", 282, 130);
-myGLCD.print("Pressure: ", 7, 156);
-myGLCD.print(PString, 160, 156);
-myGLCD.print("mbar", 280, 156);
-myGLCD.print("Humidity: ", 7, 182);
-myGLCD.print("CO2: ", 7, 208);
-myGLCD.print("Click to save measurements", CENTER, 260);
+myGLCD.print("Temperature1: ", 7, 130);
+myGLCD.print(TString, 215, 130);
+myGLCD.print("C", 295, 130);
+myGLCD.print("Temperature2: ", 7, 156);
+myGLCD.print(T2String, 215, 156);
+myGLCD.print("C", 295, 156);
+myGLCD.print("Pressure: ", 7, 182);
+myGLCD.print(PString, 160, 182);
+myGLCD.print("mbar", 275, 182);
+myGLCD.print("Humidity: ", 7, 208);
+myGLCD.print(HString, 160, 208);
+myGLCD.print("%", 245, 208);
+myGLCD.print("CO2: ", 7, 234);
+myGLCD.print("Click to save measurements", CENTER, 265);
 delay(20000);
 }
