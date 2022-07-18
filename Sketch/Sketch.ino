@@ -20,7 +20,7 @@ extern uint8_t SevenSegNumFont[];
 
 void setup()
 {
-delay(1000);
+delay(500);
 
 Serial.begin(9600);
 
@@ -39,20 +39,22 @@ myGLCD.setColor(0, 0, 0);
 myGLCD.clrScr();
 myGLCD.setColor(0, 255, 0);
 
-for (int i = 0; i < 2; i++) 
+int lap_count = 3; // 1 lap == 5 seconds to load GPS
+
+for (int i = 0; i < lap_count; i++) 
 {
 myGLCD.setColor(255, 255, 255);
 myGLCD.setFont(BigFont);
-myGLCD.print("Waiting data of GPS...", CENTER, 217);
+myGLCD.print("Waiting GPS data...", CENTER, 217);
 delay(200);
-myGLCD.fillCircle(240 + 40 * (cos(-i * PI / 4)), 120 + 40 * (sin(-i * PI / 4)), 10); delay(550);
-myGLCD.fillCircle(240 + 40 * (cos(-(i + 7)*PI / 4)), 120 + 40 * (sin(-(i + 7)*PI / 4)), 10); delay(550);
-myGLCD.fillCircle(240 + 40 * (cos(-(i + 6)*PI / 4)), 120 + 40 * (sin(-(i + 6)*PI / 4)), 10); delay(550);
-myGLCD.fillCircle(240 + 40 * (cos(-(i + 5)*PI / 4)), 120 + 40 * (sin(-(i + 5)*PI / 4)), 10); delay(550);
-myGLCD.fillCircle(240 + 40 * (cos(-(i + 4)*PI / 4)), 120 + 40 * (sin(-(i + 4)*PI / 4)), 10); delay(550);
-myGLCD.fillCircle(240 + 40 * (cos(-(i + 3)*PI / 4)), 120 + 40 * (sin(-(i + 3)*PI / 4)), 10); delay(550);
-myGLCD.fillCircle(240 + 40 * (cos(-(i + 2)*PI / 4)), 120 + 40 * (sin(-(i + 2)*PI / 4)), 10); delay(550);
-myGLCD.fillCircle(240 + 40 * (cos(-(i + 1)*PI / 4)), 120 + 40 * (sin(-(i + 1)*PI / 4)), 10); delay(550);
+myGLCD.fillCircle(240 + 40 * (cos(-i * PI / 4)), 120 + 40 * (sin(-i * PI / 4)), 10); delay(600);
+myGLCD.fillCircle(240 + 40 * (cos(-(i + 7)*PI / 4)), 120 + 40 * (sin(-(i + 7)*PI / 4)), 10); delay(600);
+myGLCD.fillCircle(240 + 40 * (cos(-(i + 6)*PI / 4)), 120 + 40 * (sin(-(i + 6)*PI / 4)), 10); delay(600);
+myGLCD.fillCircle(240 + 40 * (cos(-(i + 5)*PI / 4)), 120 + 40 * (sin(-(i + 5)*PI / 4)), 10); delay(600);
+myGLCD.fillCircle(240 + 40 * (cos(-(i + 4)*PI / 4)), 120 + 40 * (sin(-(i + 4)*PI / 4)), 10); delay(600);
+myGLCD.fillCircle(240 + 40 * (cos(-(i + 3)*PI / 4)), 120 + 40 * (sin(-(i + 3)*PI / 4)), 10); delay(600);
+myGLCD.fillCircle(240 + 40 * (cos(-(i + 2)*PI / 4)), 120 + 40 * (sin(-(i + 2)*PI / 4)), 10); delay(600);
+myGLCD.fillCircle(240 + 40 * (cos(-(i + 1)*PI / 4)), 120 + 40 * (sin(-(i + 1)*PI / 4)), 10); delay(600);
 myGLCD.clrScr();
 }
 
