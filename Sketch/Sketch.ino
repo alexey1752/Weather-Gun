@@ -5,6 +5,7 @@
 #include <SD.h>
 #include <SoftwareSerial.h>
 #include "DHT.h"
+#include <TinyGPS.h>
 
 #define DHTPIN 10 
 
@@ -13,6 +14,8 @@ UTFT myGLCD(CTE32HR, 38, 39, 40, 41);
 SFE_BMP180 pressure; 
 
 DHT dht(DHTPIN, DHT11);
+
+const int chipSelect = 4;
 
 extern uint8_t SmallFont[];
 extern uint8_t BigFont[];
@@ -31,10 +34,10 @@ Serial.println("Датчик подключен");
 else
 {                                      
 Serial.println("Датчик не подключен\n\n");  
-while(1);                                
+//while(1);                                
 }
        
-myGLCD.InitLCD(1); // Горизонтальная ориентация
+myGLCD.InitLCD(1); // 1 == Горизонтальная, 0 == вертикальная
 myGLCD.setColor(0, 0, 0);
 myGLCD.clrScr();
 myGLCD.setColor(0, 255, 0);
@@ -59,12 +62,21 @@ myGLCD.clrScr();
 }
 
 myGLCD.print("No satellite connection", CENTER, 160);
+
 delay(4500);
 
 myGLCD.clrScr();
 
-myGLCD.print("No SD connection", CENTER, 160);
+if (!SD.begin(chipSelect)) 
+{
+        Serial.println("Card failed, or not present");
+        //return;
+        myGLCD.print("No SD connection", CENTER, 160);
+}
+
+
 delay(4500);
+
 }
 
 
@@ -121,9 +133,9 @@ float h = dht.readHumidity();
 float t = dht.readTemperature(); 
 
 if (isnan(h) || isnan(t)) 
-{  // Проверка. Если не удается считать показания, выводится «Ошибка считывания», и программа завершает работу
+{
 Serial.println("Ошибка считывания");
-return;
+//return;
 }
 
 Serial.print("Влажность: ");
@@ -157,6 +169,8 @@ myGLCD.print("Humidity: ", 7, 208);
 myGLCD.print(HString, 160, 208);
 myGLCD.print("%", 245, 208);
 myGLCD.print("CO2: ", 7, 234);
+
 myGLCD.print("Click to save measurements", CENTER, 265);
+
 delay(20000);
 }
